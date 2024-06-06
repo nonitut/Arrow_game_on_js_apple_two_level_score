@@ -1,5 +1,12 @@
 document.addEventListener('DOMContentLoaded', function () {
 
+     setTimeout(function() {
+        document.querySelector('.preloader').style.display = 'none';
+        document.querySelector('.zadacha').style.display = 'block';
+        document.getElementById('score').style.display = 'block';
+        document.getElementById('level').style.display = 'block';
+    }, 3500);
+
     let score = 0;
     let level = 1;
     let isGameStarted = false;
