@@ -1,0 +1,47 @@
+@media only screen and (min-width: 1224px) {
+
+}
+
+
+@media screen and (min-device-width: 768px) and (max-device-width: 1024px) {
+   button{
+      padding: 1vw 15vw;
+      font-size: 10vw;
+      border-radius: 1vw;
+   }
+   #score, #level {
+      padding: 1vw 3vw;
+      font-size: 6vw;
+   }
+   #level{
+      margin-left: 30%;
+   }
+   #game-container{
+      margin-top: 10%;
+   }
+
+   #salute-gif {
+      position: fixed;
+      margin-top: 10%;
+      margin-left: 20%;
+      text-align: center;
+      z-index: 100;
+}
+}
+
+
+@media screen and (min-device-width: 320px) and (max-device-width: 480px) {
+   .mobile {
+      display: block;
+   }
+
+   .desktop{
+      display: none;
+   }
+}
+
+
+
+
+
+

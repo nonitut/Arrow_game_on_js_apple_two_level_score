@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="ru" dir="ltr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Игра сбора яблок</title>
+  <link href="./stylesheets/style.css" rel="stylesheet" type="text/css" />
+  <script src="./javascripts/java-script.js" charset="utf-8"></script>
+</head>
+<body>
+  <div class="preloader">
+    <div class="preloader-text">Game:  <br> 
+      Сбор яблок, в ней 2 уровня! <br> 
+      5 и 10 яблок! Твоя задача их собрать</div>
+  </div>
+  
+  <div class="desktop">
+  <h1 class="zadacha">Собирай яблоки! Используй стрелочки на клавиатуре</h1>
+  <div id="score">Score: 0</div>
+  <p id="level">Level: 1</p>
+  <div id="win-message" style="display: none;">Вы выиграли!</div>
+  <img id="salute-gif" src="./img/iskra.gif" alt="Салют" style="display: none;">
+  
+  <div id="game-container">
+    <div id="player">
+      <img src="img/player.png" alt="">
+    </div>
+  </div>
+
+  <div class="button-container">
+    <button id="start-button" class="button">Start</button>
+    <button id="next-level-button" class="button" style="display: none;">Next Level</button>
+    <a href="index.html"><button id="restart-button" class="button" style="display: none;">Restart</button></a>
+  </div>
+  </div>
+
+  <div class="mobile">
+        <p>Работает только <br> в разрешении 480px+<br>
+          с клавиатурой</p>
+  </div>
+
+</body>
+</html>
