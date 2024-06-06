@@ -1,18 +1,95 @@
 document.addEventListener('DOMContentLoaded', function () {
 
-    setTimeout(function() {
-        document.querySelector('.preloader').style.display = 'none';
-        document.querySelector('.zadacha').style.display = 'block';
-        document.getElementById('score').style.display = 'block';
-        document.getElementById('level').style.display = 'block';
-    }, 3500);
-
-    
     let score = 0;
     let level = 1;
     let isGameStarted = false;
+    let timeLeft = level === 1 ? 5 : 10;
+    let timerInterval;
 
-    function createApple() {  // Создание и отображение яблок
+    function startTimer() {
+        timerInterval = setInterval(() => {
+            if (timeLeft <= 0) {
+                clearInterval(timerInterval);
+                gameOver();
+            } else {
+                timeLeft--;
+                updateTimer();
+            }
+        }, 1000);
+    }
+
+    function updateTimer() {
+        const levelElement = document.getElementById('level');
+        levelElement.textContent = 'Level: ' + level + ' Time Left: ' + timeLeft + 's';
+    }
+
+    function stopTimer() {
+        clearInterval(timerInterval);
+    }
+
+    function resetTimer() {
+        timeLeft = level === 1 ? 5 : 10;
+        updateTimer();
+    }
+
+    function gameOver() {
+        stopTimer();
+        const restartButton = document.getElementById('restart-button');
+        const winMessage = document.getElementById('win-message');
+        restartButton.style.display = 'block';
+        winMessage.textContent = 'Вы проиграли!';
+        winMessage.style.display = 'block';
+        isGameStarted = false;
+    }
+
+    function startGame() {
+        const startButton = document.getElementById('start-button');
+        const scoreElement = document.getElementById('score');
+        const taskElement = document.querySelector('.zadacha');
+
+        startButton.style.display = 'none';
+        scoreElement.style.display = 'block';
+        taskElement.style.display = 'none';
+
+        isGameStarted = true;
+        resetTimer();
+        startTimer();
+
+        // Create apples
+        let appleCount = level === 1 ? 5 : 10;
+        for (let i = 0; i < appleCount; i++) {
+            createApple();
+        }
+
+        // Attach event listener for keyboard
+        document.addEventListener('keydown', movePlayer);
+    }
+
+    function nextLevel() {
+        level++;
+        score = 0;
+        resetTimer();
+        const nextLevelButton = document.getElementById('next-level-button');
+        nextLevelButton.style.display = 'none';
+
+        // Remove all apples
+        document.querySelectorAll('.apple').forEach(apple => apple.remove());
+
+        // Create new apples
+        let appleCount = level === 1 ? 5 : 10;
+        for (let i = 0; i < appleCount; i++) {
+            createApple();
+        }
+    }
+
+    function winGame() {
+        const winButton = document.getElementById('win-message');
+        winButton.style.display = 'none';
+        isGameStarted = false;
+        stopTimer();
+    }
+
+    function createApple() {  
         const apple = document.createElement('div');
         apple.classList.add('apple');
 
@@ -26,7 +103,7 @@ document.addEventListener('DOMContentLoaded', function () {
         apple.addEventListener('click', onAppleClick);
     }
 
-    function onAppleClick() { // Обработчик события клика на яблоко
+    function onAppleClick() { 
         if (!isGameStarted) return;
 
         this.remove();
@@ -40,18 +117,11 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
-    function updateScore() { // Обновление счета очков
+    function updateScore() { 
         const scoreElement = document.getElementById('score');
         scoreElement.textContent = 'Score: ' + score;
     }
 
-    // Обновление уровня
-    function updateLevel() {
-        const levelElement = document.getElementById('level');
-        levelElement.textContent = 'Level: ' + level;
-    }
-
-    // Управление персонажем
     function movePlayer(event) {
         if (!isGameStarted) return;
 
@@ -60,7 +130,6 @@ document.addEventListener('DOMContentLoaded', function () {
         const containerRect = gameContainer.getBoundingClientRect();
         const playerRect = player.getBoundingClientRect();
 
-        // Проверяем и задаем начальные координаты, если они не установлены
         if (!player.style.top) {
             player.style.top = '0px';
         }
@@ -82,7 +151,6 @@ document.addEventListener('DOMContentLoaded', function () {
         checkCollision(player);
     }
 
-    // Проверка столкновения с яблоком
     function checkCollision(player) {
         const apples = document.querySelectorAll('.apple');
         apples.forEach(apple => {
@@ -100,7 +168,6 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    // Проверка столкновения двух элементов
     function isColliding(element1, element2) {
         const rect1 = element1.getBoundingClientRect();
         const rect2 = element2.getBoundingClientRect();
@@ -113,86 +180,31 @@ document.addEventListener('DOMContentLoaded', function () {
         );
     }
 
-    // Показать кнопку следующего уровня
     function showNextLevelButton() {
         const nextLevelButton = document.getElementById('next-level-button');
         nextLevelButton.style.display = 'block';
     }
 
-    // Показать кнопку рестарта
     function showRestartButton() {
         const restartButton = document.getElementById('restart-button');
         restartButton.style.display = 'block';
 
-        // Показать сообщение о победе и салют
         const winMessage = document.getElementById('win-message');
         const saluteGif = document.getElementById('salute-gif');
+        winMessage.textContent = 'Вы выиграли!';
         winMessage.style.display = 'block';
         saluteGif.style.display = 'block';
     }
 
-    // Обработчик нажатия на кнопку старта
-    function startGame() {
-        const startButton = document.getElementById('start-button');
-        const scoreElement = document.getElementById('score');
-        const taskElement = document.querySelector('.zadacha');
-
-        startButton.style.display = 'none';
-        scoreElement.style.display = 'block';
-        taskElement.style.display = 'none';
-
-        isGameStarted = true;
-
-        // Создаем яблоки
-        let appleCount = level === 1 ? 5 : 10;
-        for (let i = 0; i < appleCount; i++) {
-            createApple();
-        }
-
-        // Вешаем обработчик события на клавиатуру
-        document.addEventListener('keydown', movePlayer);
-    }
-
-    // Обработчик нажатия на кнопку следующего уровня
-    function nextLevel() {
-        level++;
-        score = 0;
-        updateScore();
-        updateLevel();
-
-        const nextLevelButton = document.getElementById('next-level-button');
-        nextLevelButton.style.display = 'none';
-
-        // Удаляем все яблоки
-        document.querySelectorAll('.apple').forEach(apple => apple.remove());
-
-        // Создаем новые яблоки
-        let appleCount = level === 1 ? 5 : 10;
-        for (let i = 0; i < appleCount; i++) {
-            createApple();
-        }
-    }
-
-    // Обработчик нажатия на кнопку победы
-    function winGame() {
-        const winButton = document.getElementById('win-message');
-        winButton.style.display = 'none';
-        isGameStarted = false;
-
-        // Скрыть салют
-        const saluteGif = document.getElementById('salute-gif');
-        saluteGif.style.display = 'none';
-    }
-
-    // Начало игры
     const startButton = document.getElementById('start-button');
     startButton.addEventListener('click', startGame);
 
-    // Следующий уровень
     const nextLevelButton = document.getElementById('next-level-button');
     nextLevelButton.addEventListener('click', nextLevel);
 
-    // Победа в игре
     const winButton = document.getElementById('win-message');
     winButton.addEventListener('click', winGame);
+
+    
 });
+
