@@ -1,3 +1,16 @@
+// startTimer() - начинает отсчет времени с учетом уровня.
+// updateTimer() - обновляет отображение времени на экране.
+// resetTimer() - сбрасывает таймер при старте нового уровня.
+// gameOver() - завершает игру при окончании времени.
+// nextLevel() - переходит на следующий уровень.
+// winGame() - завершает игру при победе.
+// createApple() - создает яблоко на поле игры.
+// onAppleClick() - обрабатывает клик по яблоку.
+// updateScore() - обновляет отображение счета на экране.
+// movePlayer() - обрабатывает движение игрока по полю.
+// checkCollision() - проверяет столкновения игрока с яблоками.
+// isColliding() - определяет, произошло ли столкновение между элементами.
+
 document.addEventListener('DOMContentLoaded', function () {
 
     setTimeout(function () {
@@ -7,12 +20,13 @@ document.addEventListener('DOMContentLoaded', function () {
         document.getElementById('level').style.display = 'block';
     }, 3500);
 
-    let score = 0;
-    let level = 1;
-    let isGameStarted = false;
-    let timeLeft = level === 1 ? 5 : 10;
-    let timerInterval;
+    let score = 0; // Переменная для хранения счета
+    let level = 1; // Переменная для хранения уровня игры
+    let isGameStarted = false; // Переменная для проверки, начата ли игра
+    let timeLeft = level === 1 ? 10 : 15; // Время на уровне (10 секунд на первом уровне, 15 на втором)
+    let timerInterval; // Переменная для интервала таймера
 
+    // Функция запуска таймера
     function startTimer() {
         timerInterval = setInterval(() => {
             if (timeLeft <= 0) {
@@ -25,20 +39,24 @@ document.addEventListener('DOMContentLoaded', function () {
         }, 1000);
     }
 
+    // Функция обновления таймера
     function updateTimer() {
         const levelElement = document.getElementById('level');
-        levelElement.textContent = 'Level: ' + level + ' Time Left: ' + timeLeft + 's';
+        levelElement.textContent = 'Уровень: ' + level + ' Осталось времени: ' + timeLeft + 'с';
     }
 
+    // Функция остановки таймера
     function stopTimer() {
         clearInterval(timerInterval);
     }
 
+    // Функция сброса таймера
     function resetTimer() {
-        timeLeft = level === 1 ? 5 : 10;
+        timeLeft = level === 1 ? 10 : 15;
         updateTimer();
     }
 
+    // Функция завершения игры
     function gameOver() {
         stopTimer();
         const restartButton = document.getElementById('restart-button');
@@ -49,6 +67,7 @@ document.addEventListener('DOMContentLoaded', function () {
         isGameStarted = false;
     }
 
+    // Функция начала игры
     function startGame() {
         const startButton = document.getElementById('start-button');
         const scoreElement = document.getElementById('score');
@@ -62,16 +81,17 @@ document.addEventListener('DOMContentLoaded', function () {
         resetTimer();
         startTimer();
 
-        // Create apples
+        // Создание яблок
         let appleCount = level === 1 ? 5 : 10;
         for (let i = 0; i < appleCount; i++) {
             createApple();
         }
 
-        // Attach event listener for keyboard
+        // Привязка обработчика событий клавиатуры
         document.addEventListener('keydown', movePlayer);
     }
 
+    // Функция перехода на следующий уровень
     function nextLevel() {
         level++;
         score = 0;
@@ -79,16 +99,17 @@ document.addEventListener('DOMContentLoaded', function () {
         const nextLevelButton = document.getElementById('next-level-button');
         nextLevelButton.style.display = 'none';
 
-        // Remove all apples
+        // Удаление всех яблок
         document.querySelectorAll('.apple').forEach(apple => apple.remove());
 
-        // Create new apples
+        // Создание новых яблок
         let appleCount = level === 1 ? 5 : 10;
         for (let i = 0; i < appleCount; i++) {
             createApple();
         }
     }
 
+    // Функция завершения игры при победе
     function winGame() {
         const winButton = document.getElementById('win-message');
         winButton.style.display = 'none';
@@ -96,6 +117,7 @@ document.addEventListener('DOMContentLoaded', function () {
         stopTimer();
     }
 
+    // Функция создания яблока
     function createApple() {
         const apple = document.createElement('div');
         apple.classList.add('apple');
@@ -110,6 +132,7 @@ document.addEventListener('DOMContentLoaded', function () {
         apple.addEventListener('click', onAppleClick);
     }
 
+    // Обработчик клика по яблоку
     function onAppleClick() {
         if (!isGameStarted) return;
 
@@ -124,11 +147,13 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
+    // Функция обновления счета
     function updateScore() {
         const scoreElement = document.getElementById('score');
-        scoreElement.textContent = 'Score: ' + score;
+        scoreElement.textContent = 'Счет: ' + score;
     }
 
+    // Функция перемещения игрока
     function movePlayer(event) {
         if (!isGameStarted) return;
 
@@ -162,6 +187,7 @@ document.addEventListener('DOMContentLoaded', function () {
         checkCollision(player);
     }
 
+    // Функция проверки столкновений
     function checkCollision(player) {
         const apples = document.querySelectorAll('.apple');
         apples.forEach(apple => {
@@ -179,23 +205,26 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    function isColliding(element1, element2) {
-        const rect1 = element1.getBoundingClientRect();
-        const rect2 = element2.getBoundingClientRect();
+    // Функция проверки столкновения элементов
+function isColliding(element1, element2) {
+    const rect1 = element1.getBoundingClientRect();
+    const rect2 = element2.getBoundingClientRect();
 
-        return !(
-            rect1.right < rect2.left ||
-            rect1.left > rect2.right ||
-            rect1.bottom < rect2.top ||
-            rect1.top > rect2.bottom
-        );
-    }
+    return !(
+        rect1.right < rect2.left ||
+        rect1.left > rect2.right ||
+        rect1.bottom < rect2.top ||
+        rect1.top > rect2.bottom
+    );
+}
 
+// Функция отображения кнопки следующего уровня
     function showNextLevelButton() {
         const nextLevelButton = document.getElementById('next-level-button');
         nextLevelButton.style.display = 'block';
     }
 
+    // Функция отображения кнопки перезапуска игры
     function showRestartButton() {
         const restartButton = document.getElementById('restart-button');
         restartButton.style.display = 'block';
@@ -207,6 +236,7 @@ document.addEventListener('DOMContentLoaded', function () {
         saluteGif.style.display = 'block';
     }
 
+    // Привязка событий к кнопкам
     const startButton = document.getElementById('start-button');
     startButton.addEventListener('click', startGame);
 
@@ -216,7 +246,11 @@ document.addEventListener('DOMContentLoaded', function () {
     const winButton = document.getElementById('win-message');
     winButton.addEventListener('click', winGame);
 
+    
 
 });
+
+
+
 
 
