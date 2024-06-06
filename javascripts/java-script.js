@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', function () {
 
-     setTimeout(function() {
+    setTimeout(function () {
         document.querySelector('.preloader').style.display = 'none';
         document.querySelector('.zadacha').style.display = 'block';
         document.getElementById('score').style.display = 'block';
@@ -96,7 +96,7 @@ document.addEventListener('DOMContentLoaded', function () {
         stopTimer();
     }
 
-    function createApple() {  
+    function createApple() {
         const apple = document.createElement('div');
         apple.classList.add('apple');
 
@@ -105,12 +105,12 @@ document.addEventListener('DOMContentLoaded', function () {
 
         apple.style.left = Math.random() * (containerRect.width - 100) + 'px';
         apple.style.top = Math.random() * (containerRect.height - 100) + 'px';
-        
+
         gameContainer.appendChild(apple);
         apple.addEventListener('click', onAppleClick);
     }
 
-    function onAppleClick() { 
+    function onAppleClick() {
         if (!isGameStarted) return;
 
         this.remove();
@@ -124,7 +124,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
-    function updateScore() { 
+    function updateScore() {
         const scoreElement = document.getElementById('score');
         scoreElement.textContent = 'Score: ' + score;
     }
@@ -145,13 +145,17 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         switch (event.key) {
-            case 'ArrowUp':     player.style.top = Math.max(0, parseInt(player.style.top) - 10) + 'px';
+            case 'ArrowUp':
+                player.style.top = Math.max(0, parseInt(player.style.top) - 10) + 'px';
                 break;
-            case 'ArrowDown':   player.style.top = Math.min(containerRect.height - playerRect.height, parseInt(player.style.top) + 10) + 'px';
+            case 'ArrowDown':
+                player.style.top = Math.min(containerRect.height - playerRect.height, parseInt(player.style.top) + 10) + 'px';
                 break;
-            case 'ArrowLeft':   player.style.left = Math.max(0, parseInt(player.style.left) - 10) + 'px';
+            case 'ArrowLeft':
+                player.style.left = Math.max(0, parseInt(player.style.left) - 10) + 'px';
                 break;
-            case 'ArrowRight':  player.style.left = Math.min(containerRect.width - playerRect.width, parseInt(player.style.left) + 10) + 'px';
+            case 'ArrowRight':
+                player.style.left = Math.min(containerRect.width - playerRect.width, parseInt(player.style.left) + 10) + 'px';
                 break;
         }
 
@@ -212,6 +216,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const winButton = document.getElementById('win-message');
     winButton.addEventListener('click', winGame);
 
-    
+
 });
+
 
